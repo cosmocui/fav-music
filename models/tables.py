@@ -14,3 +14,13 @@
 ## >>> rows=db(db.mytable.myfield=='value').select(db.mytable.ALL)
 ## >>> for row in rows: print row.id, row.myfield
 #########################################################################
+
+from datetime import datetime
+
+db.define_table('audio',
+				Field('user_id', db.auth_user, required=True),
+				Field('audio', 'upload', default='path/', required=True),
+				Field('upload_time', 'datetime'),
+				)
+db.post.user_id.readable = False
+db.post.user_id.writable = False
