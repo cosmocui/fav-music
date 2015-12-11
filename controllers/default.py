@@ -1,10 +1,3 @@
-#########################################################################
-#  CMPS 183 (Fall 2015) Project
-#  Project Name: Find Your Car Parts
-#  Name: Yu "Kevin" Cui
-#  E-mail:  ycui8@ucsc.edu
-#########################################################################
-
 def index():
 	makes = db().select(db.cars.make, distinct=True, orderby=db.cars.make)
 	fits_matched = []
