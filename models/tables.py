@@ -1,26 +1,28 @@
-#########################################################################
-## Define your tables below; for example
-##
-## >>> db.define_table('mytable',Field('myfield','string'))
-##
-## Fields can be 'string','text','password','integer','double','boolean'
-##       'date','time','datetime','blob','upload', 'reference TABLENAME'
-## There is an implicit 'id integer autoincrement' field
-## Consult manual for more options, validators, etc.
-##
-## More API examples for controllers:
-##
-## >>> db.mytable.insert(myfield='value')
-## >>> rows=db(db.mytable.myfield=='value').select(db.mytable.ALL)
-## >>> for row in rows: print row.id, row.myfield
-#########################################################################
+db.define_table('cars',
+				Field('make', required=True),
+				Field('model', required=True),
+				Field('submodel'),
+				Field('mfg_year', required=True))
 
-from datetime import datetime
+db.define_table('wheels',
+				Field('pn', required=True),
+				Field('brand', required=True),
+				Field('model', required=True),
+				Field('price', 'double', required=True),
+				Field('description', 'text'),
+				Field('finishing'),
+				Field('diameter', 'integer', required=True),
+				Field('width', 'double'),
+				Field('bolt'),
+				Field('offset_val', 'integer'),
+				Field('image', 'upload'))
 
-db.define_table('audio',
-				Field('user_id', db.auth_user, required=True),
-				Field('audio', 'upload', default='path/', required=True),
-				Field('upload_time', 'datetime'),
-				)
-db.post.user_id.readable = False
-db.post.user_id.writable = False
+# For cars-wheels N-to-N relationship
+db.define_table('fits',
+				Field('car', 'reference cars', required=True),
+				Field('wheel', 'reference wheels', required=True))
+
+# For wheel-user N-to-N relationship
+db.define_table('favs',
+				Field('wheel', 'reference wheels', required=True),
+				Field('user_id', 'reference auth_user', required=True))

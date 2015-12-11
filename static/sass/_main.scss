@@ -1,3 +1,92 @@
-.colorful {
-  color: $clrHilight;
+// Headers
+header1 {
+  font-family: "Impact, Charcoal", sans-serif; // doesn't work: to-do
+  color: $clrH1;
+  font-size: 60px;
+  font-weight: bold;
+  text-shadow: 0 0 20px red;
+  margin-left: 8px;
+  align: center;
+}
+
+// Cascading Drop-down Lists
+span.search-title {
+  font-size: 18px;
+  color: #fdf0bf;
+  margin-right: 3px;
+  margin-left: 5px;
+  text-shadow: 0 0 5px red;
+}
+
+select.dropdown {
+  min-width: 140px;
+  font-size: 18px;
+}
+
+// Wheel list
+a.wheel-title {
+  font-size: 30px;
+  font-weight: bold;
+  text-align: center;
+  color: $clrBoardTitle;
+}
+
+div.wheel-list {
+  background-color: $clrBoardLsBg;
+  padding: 20px;
+  @include background-image(linear-gradient(lighten($clrBoardLsBg, 20%), $clrBoardLsBg));
+  margin: 10px;
+  @include border-radius(20px);
+  border: 1px solid $clrBoxBorder;
+  @include box-shadow(rgba(#c8bb84,0.7) 0 4px 10px 2px);
+  vertical-align: top;
+  display: inline-block;
+  text-align: left;
+  //max-width: 600px;
+
+}
+
+div.wheel-img {
+  float: left;
+}
+
+img.only-wheel-image {
+  height: 280px;
+}
+
+div.icons-dummy {
+  overflow: hidden;
+}
+
+i.fav-yes {
+  font-size: 22px;
+  color: #9e300d;
+  float: left;
+  margin-left: 7px;
+  padding-left: 32px;
+}
+
+i.fav-no {
+  font-size: 22px;
+  color: darkgrey;
+  float: left;
+  margin-left: 7px;
+  padding-left: 32px
+}
+
+div.wheel-text {
+  padding-left: 40px;
+  overflow: hidden;
+  margin-top: 5px;
+  white-space: pre-line;
+  font-weight: bold;
+}
+
+// Misc
+div.empty {
+  font-size: 16px;
+  color: #ababab;
+  margin-left: 12px;
+  margin-top: 20px;
+  margin-bottom: 20px;
 }

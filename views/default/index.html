@@ -1,52 +1,209 @@
-{{left_sidebar_enabled,right_sidebar_enabled=False,('message' in globals())}}
 {{extend 'layout.html'}}
 
-{{block header}}
-    <header class="container-fluid background">
-      <div class="jumbotron text-center">
-        {{if response.title:}}
-        <h1>{{=response.title}}
-          <small>{{=response.subtitle or ''}}</small></h1>
-        {{pass}}
-      </div>
-    </header>
-{{end}}
+<body style="background-color: #414141" background={{=URL('static', 'images/homepage_bg.jpg')}}>
+<header1><i>Find Your Car Parts</i></header1>
 
-{{if 'message' in globals():}}
-<h2>{{=message}}</h2>
-<p class="lead">{{=T('How did you get here?')}}</p>
-<ol>
-  <li>{{=T('You are successfully running web2py')}}</li>
-  <li>{{=XML(T('You visited the url %s', A(request.env.path_info,_href=request.env.path_info)))}}</li>
-  <li>{{=XML(T('Which called the function %s located in the file %s',
-    (A(request.function+'()',_href='#'),
-    A('web2py/applications/%(application)s/controllers/%(controller)s.py' % request,
-    _href=URL('admin','default','peek', args=(request.application,'controllers',request.controller+'.py'))))))}}</li>
-  <li>{{=XML(T('The output of the file is a dictionary that was rendered by the view %s',
-    A('web2py/applications/%(application)s/views/%(controller)s/index.html' % request,
-    _href=URL('admin','default','peek',args=(request.application,'views',request.controller,'index.html')))))}}</li>
-  <li>{{=T('You can modify this application and adapt it to your needs')}}</li>
-</ol>
-{{elif 'content' in globals():}}
-{{=content}}
+<div>
+  <span>
+    <span class="search-title">Make: </span>
+    <select id='dropdown_make' name='make' class='dropdown'>
+      <option name="select">Select</option>
+      {{for row in makes:}}
+        {{=OPTION(row.make, _value=row.make)}}
+      {{pass}}
+    </select>
+    <span class="search-title">Model: </span>
+    <select id='dropdown_model' name='model' class='dropdown' disabled>
+      <option name="select">Select</option>
+    </select>
+    <span class="search-title">Sub-Model: </span>
+    <select id='dropdown_submodel' name='submodel' class='dropdown' disabled>
+      <option name="select">Select</option>
+    </select>
+    <span class="search-title">Year: </span>
+    <select id='dropdown_year' name='year' class='dropdown' disabled>
+      <option name="select">Select</option>
+    </select>
+  </span>
+  {{=A('Find', _id='search_button', _class='btn btn-primary', _style="font-size: 18px; margin-left: 10px; width: 70px", _href=URL('default', 'index'))}}
+</div>
+
+{{if len(fits_matched) > 0:}}
+  {{i = 0}}
+  {{for fit in fits_matched:}}
+    <!-- Show corresponding fav icon status -->
+    {{class_name = ''}}
+    {{if fav_list[i] is True:}}
+      {{class_name = 'fav-yes'}}
+    {{else:}}
+      {{class_name = 'fav-no'}}
+    {{pass}}
+    <div class="wheel-list">
+        <div class="wheel-img">
+          <img class="only-wheel-image" src="{{=URL('default', 'download', args=fit.wheel.image)}}"/>
+        </div>
+        <!-- show edit and delete icons -->
+        <div class="icons-dummy">
+          <span id='fav_toggle'>
+            {{if auth.user_id is not None:}}
+              {{=I(icon_starred, _id='icon_fav_toggle', _class=class_name, data={'wheel_id': fit.wheel.id}, user_signature=True)}}
+            {{pass}}
+          </span>
+        </div>
+        <div class="wheel-text">
+            <span>{{=T('Part Number: ' + fit.wheel.pn)}}</span>
+            <span>{{=T('Brand: ' + fit.wheel.brand)}}</span>
+            <span>{{=T('Model: ' + fit.wheel.model)}}</span>
+            <span>{{=T('Price: $' + str(fit.wheel.price))}}</span>
+            <span>{{=T('Finish: ' + fit.wheel.finishing)}}</span>
+            <span>{{=T('Diameter: ' + str(fit.wheel.deameter))}}</span>
+            <span>{{=T('Offset: ' + str(fit.wheel.offset_val))}}</span>
+            <span>{{=T('Description: ' + fit.wheel.description)}}</span>
+        </div>
+      </div>
+    {{i += 1}}
+  {{pass}}
 {{else:}}
-{{=BEAUTIFY(response._vars)}}
+  <div class="empty">No matching results.</div>
 {{pass}}
 
-{{block right_sidebar}}
-<div class="panel panel-info">
-  <div class="panel-heading"><h3 class="panel-title"><a class="btn-block"
-      href="{{=URL('admin','default','index')}}">
-      <i class="glyphicon glyphicon-cog"></i>
-      {{=T("admin")}}
-    </a></h3></div>
-  <div class="panel-body">
-    {{=T("Don't know what to do?")}}
-  </div>
-  <ul class="list-group">
-    <li class="list-group-item">{{=A(T("Online examples"), _href=URL('examples','default','index'))}}</li>
-    <li class="list-group-item"><a href="http://web2py.com">web2py.com</a></li>
-    <li class="list-group-item"><a href="http://web2py.com/book">{{=T('Documentation')}}</a></li>
-  </ul>
-</div>
-{{end}}
+
+<script>
+$(document).ready(function() {
+
+  function get_models(make_selected) {
+    $.ajax(
+        "{{=URL('default', 'get_models', user_signature=True)}}", {
+        method: 'POST',
+        dataType: "json",
+        data: {make_selected: make_selected},
+        success: function(data) {
+          var models = data['models'];
+          var $dropdown_model = jQuery('#dropdown_model');
+          $dropdown_model.empty();  // remove all child nodes
+          $dropdown_model.append('<option name="select">Select</option>');
+          $dropdown_model.removeAttr("disabled");
+          var new_option = "";
+          for (var i = 0; i < models.length; i++) {
+            new_option = $('<option value=' + models[i] + '>' + models[i] + '</option>');
+            $dropdown_model.append(new_option);
+          }
+        },
+        error: function () {}
+    });
+  }
+
+  function get_submodels(make_selected, model_selected) {
+    $.ajax(
+        "{{=URL('default', 'get_submodels', user_signature=True)}}", {
+        method: 'POST',
+        dataType: "json",
+        data: {
+          make_selected: make_selected,
+          model_selected: model_selected
+        },
+        success: function(data) {
+          var submodels = data['submodels'];
+          var $dropdown_submodel = jQuery('#dropdown_submodel');
+          $dropdown_submodel.empty();  // remove all child nodes
+          $dropdown_submodel.append('<option name="select">Select</option>');
+          $dropdown_submodel.removeAttr("disabled");
+          var new_option = "";
+          for (var i = 0; i < submodels.length; i++) {
+            new_option = $('<option value=' + submodels[i] + '>' + submodels[i] + '</option>');
+            $dropdown_submodel.append(new_option);
+          }
+        },
+        error: function () {}
+    });
+  }
+
+  function get_years(make_selected, model_selected, submodel_selected) {
+    $.ajax(
+        "{{=URL('default', 'get_years', user_signature=True)}}", {
+        method: 'POST',
+        dataType: "json",
+        data: {
+          make_selected: make_selected,
+          model_selected: model_selected,
+          submodel_selected: submodel_selected
+        },
+        success: function(data) {
+          var years = data['years'];
+          var $dropdown_year = jQuery('#dropdown_year');
+          $dropdown_year.empty();  // remove all child nodes
+          $dropdown_year.append('<option name="select">Select</option>');
+          $dropdown_year.removeAttr("disabled");
+          var new_option = "";
+          for (var i = 0; i < years.length; i++) {
+            new_option = $('<option value=' + years[i] + '>' + years[i] + '</option>');
+            $dropdown_year.append(new_option);
+          }
+        },
+        error: function () {}
+    });
+  }
+
+  function toggle_fav(wheel_id) {
+    $.ajax(
+        "{{=URL('default', 'toggle_fav', user_signature=True)}}", {
+        method: 'POST',
+        dataType: "json",
+        data: {wheel_id: wheel_id},
+        success: function(data) {
+          var years = data['years'];
+          var $dropdown_year = jQuery('#dropdown_year');
+          $dropdown_year.empty();  // remove all child nodes
+          $dropdown_year.append('<option name="select">Select</option>');
+          $dropdown_year.removeAttr("disabled");
+          var new_option = "";
+          for (var i = 0; i < years.length; i++) {
+            new_option = $('<option value=' + years[i] + '>' + years[i] + '</option>');
+            $dropdown_year.append(new_option);
+          }
+        },
+        error: function () {}
+    });
+  }
+
+  $('#dropdown_make').on("change", function() {
+    var make_selected = $('#dropdown_make').val();
+    get_models(make_selected);
+  });
+
+  $('#dropdown_model').on("change", function() {
+    var make_selected = $('#dropdown_make').val();
+    var model_selected = $('#dropdown_model').val();
+    get_submodels(make_selected, model_selected);
+  });
+
+  $('#dropdown_submodel').on("change", function() {
+    var make_selected = $('#dropdown_make').val();
+    var model_selected = $('#dropdown_model').val();
+    var submodel_selected = $('#dropdown_submodel').val();
+    get_years(make_selected, model_selected, submodel_selected);
+  });
+
+  $('#dropdown_year').on("change", function() {
+    var make_selected = $('#dropdown_make').val();
+    var model_selected = $('#dropdown_model').val();
+    var submodel_selected = $('#dropdown_submodel').val();
+    var year_selected = $('#dropdown_year').val();
+    $('#search_button').attr('href', '{{=URL('default', 'index')}}' + '/' + make_selected + '/' + model_selected + '/' + submodel_selected + '/' + year_selected);
+  });
+
+  $('span#fav_toggle').each(function() {
+    var $icon_fav_toggle = $(this).find('i#icon_fav_toggle');
+    $icon_fav_toggle.on("click", function() {
+      var self = $(this);
+      var wheel_id = self.attr('data-wheel_id');
+      toggle_fav(wheel_id);
+      if (self.attr('class') == 'fav-yes')
+        self.removeClass("fav-yes").addClass("fav-no");
+      else
+        self.removeClass("fav-no").addClass("fav-yes");
+    })
+  })
+})
+</script>
+</body>

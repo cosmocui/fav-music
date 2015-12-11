@@ -1,4 +1,107 @@
-/* line 1, ../sass/_main.scss */
-.colorful {
-  color: #bb8833;
+/* line 2, ../sass/_main.scss */
+header1 {
+  font-family: "Impact, Charcoal", sans-serif;
+  color: #fff4d2;
+  font-size: 60px;
+  font-weight: bold;
+  text-shadow: 0 0 20px red;
+  margin-left: 8px;
+  align: center;
+}
+
+/* line 13, ../sass/_main.scss */
+span.search-title {
+  font-size: 18px;
+  color: #fdf0bf;
+  margin-right: 3px;
+  margin-left: 5px;
+  text-shadow: 0 0 5px red;
+}
+
+/* line 21, ../sass/_main.scss */
+select.dropdown {
+  min-width: 140px;
+  font-size: 18px;
+}
+
+/* line 27, ../sass/_main.scss */
+a.wheel-title {
+  font-size: 30px;
+  font-weight: bold;
+  text-align: center;
+  color: #454545;
+}
+
+/* line 34, ../sass/_main.scss */
+div.wheel-list {
+  background-color: #d8cb9f;
+  padding: 20px;
+  background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PGxpbmVhckdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJvYmplY3RCb3VuZGluZ0JveCIgeDE9IjAuNSIgeTE9IjAuMCIgeDI9IjAuNSIgeTI9IjEuMCI+PHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2Y1ZjJlOCIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iI2Q4Y2I5ZiIvPjwvbGluZWFyR3JhZGllbnQ+PC9kZWZzPjxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JhZCkiIC8+PC9zdmc+IA==');
+  background-size: 100%;
+  background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #f5f2e8), color-stop(100%, #d8cb9f));
+  background-image: -moz-linear-gradient(#f5f2e8, #d8cb9f);
+  background-image: -webkit-linear-gradient(#f5f2e8, #d8cb9f);
+  background-image: linear-gradient(#f5f2e8, #d8cb9f);
+  margin: 10px;
+  -moz-border-radius: 20px;
+  -webkit-border-radius: 20px;
+  border-radius: 20px;
+  border: 1px solid #444444;
+  -moz-box-shadow: rgba(200, 187, 132, 0.7) 0 4px 10px 2px;
+  -webkit-box-shadow: rgba(200, 187, 132, 0.7) 0 4px 10px 2px;
+  box-shadow: rgba(200, 187, 132, 0.7) 0 4px 10px 2px;
+  vertical-align: top;
+  display: inline-block;
+  text-align: left;
+}
+
+/* line 49, ../sass/_main.scss */
+div.wheel-img {
+  float: left;
+}
+
+/* line 53, ../sass/_main.scss */
+img.only-wheel-image {
+  height: 280px;
+}
+
+/* line 57, ../sass/_main.scss */
+div.icons-dummy {
+  overflow: hidden;
+}
+
+/* line 61, ../sass/_main.scss */
+i.fav-yes {
+  font-size: 22px;
+  color: #9e300d;
+  float: left;
+  margin-left: 7px;
+  padding-left: 32px;
+}
+
+/* line 69, ../sass/_main.scss */
+i.fav-no {
+  font-size: 22px;
+  color: darkgrey;
+  float: left;
+  margin-left: 7px;
+  padding-left: 32px;
+}
+
+/* line 77, ../sass/_main.scss */
+div.wheel-text {
+  padding-left: 40px;
+  overflow: hidden;
+  margin-top: 5px;
+  white-space: pre-line;
+  font-weight: bold;
+}
+
+/* line 86, ../sass/_main.scss */
+div.empty {
+  font-size: 16px;
+  color: #ababab;
+  margin-left: 12px;
+  margin-top: 20px;
+  margin-bottom: 20px;
 }
